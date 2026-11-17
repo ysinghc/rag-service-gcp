@@ -51,7 +51,7 @@ flowchart LR
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
-pytest -q                       # 44 tests, including the golden-set quality gate
+pytest -q                       # 50 tests, including the golden-set quality gate
 ruff check .
 
 ragservice --store demo.sqlite ingest data/docs/*.md data/tickets.csv data/products.jsonl
@@ -133,6 +133,8 @@ These numbers come from a small, hand-written golden set over a synthetic corpus
 - **Grounding contract.** Sources are numbered and must be cited. Citations are parsed and validated against the number of sources. An answer with no valid citation is marked `grounded: false` so callers can handle it.
 - **Protocols at the seams.** `Embedder`, `VectorStore` and `LLM` are small protocols. Tests use fakes, and the Vertex adapters are constructor-injectable.
 - **Telemetry is injected.** The pipeline takes a tracer, so the console exporter can be used in development and OTLP in production without code changes.
+- **Re-ingesting replaces.** Ingesting a source removes its previous chunks and inserts the new ones in one transaction. Retired text can no longer be retrieved.
+- **One index, one embedder.** Every write is checked against the index dimension before it is committed. Mixing embedders in one file is rejected with a clear message instead of corrupting the index.
 
 ## Configuration
 
@@ -151,12 +153,14 @@ These numbers come from a small, hand-written golden set over a synthetic corpus
 
 ## Verification status
 
-- **Verified here:** lint, all 44 unit and integration tests, the offline evaluation, and the FastAPI routes through `TestClient`.
+- **Verified here:** lint, all 50 unit, integration and regression tests, the offline evaluation, the FastAPI routes through a live uvicorn server, the Dockerfile's start command run from a copied, non-editable install (Docker itself was not available to build the image), and wheel installs run from outside the repository. The regression tests cover defects found in end-to-end testing: stale chunks after a re-ingest, index corruption from a rejected write, and non-ASCII tokenisation.
 - **Covered by tests with fake clients only:** the Gemini generation and Vertex embedding adapters, including how usage metadata maps to token counts and how embedding requests are batched. These have not been run against live Vertex AI in this repository.
 - **Not verified here:** the Docker image build and the Cloud Run deployment.
 
 ## Limitations and next steps
 
+- The lexical half of the evidence gate passes when any content word appears in the corpus. A question that shares only a company name with the documents gets through to the model. The offline extractive model then quotes the closest sentence, so its citation is not evidence of an answer. Declining unanswerable questions is the model's job, and this behaviour has not been measured with Gemini.
+- Lexical retrieval segments words on Unicode letters and digits. Scripts without spaces, such as Chinese or Japanese, are not segmented, so the offline backend cannot retrieve from them. Use the Vertex embedder for those languages.
 - Vector search is exact brute force over a SQLite store. That is fine up to a few hundred thousand chunks. Beyond that, move to pgvector with an HNSW index or Vertex AI Vector Search.
 - Cloud Run's filesystem is ephemeral, so a SQLite index does not survive restarts or scale-out. Production needs a managed vector store.
 - Ingestion is synchronous and serialised by one lock. Large corpora should go through a job queue.

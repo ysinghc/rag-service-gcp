@@ -73,5 +73,7 @@ Run these from the repository root. `make install` creates `.venv` once.
 
 - Live Gemini and Vertex embeddings are unit-tested with fakes only.
 - Vector search is exact brute force. There is no ANN index.
+- The lexical half of the evidence gate passes when any content word matches the corpus, so the model must decline unanswerable questions. Its behaviour with live Gemini is unmeasured.
+- Tokenisation segments on Unicode letters and digits but not on scripts without spaces (for example Chinese or Japanese).
 - Cloud Run's filesystem is ephemeral, so the SQLite index does not persist there.
 - The app has no authentication of its own. It relies on Cloud Run IAM.

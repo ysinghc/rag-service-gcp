@@ -90,10 +90,11 @@ class RAGPipeline:
         started = perf_counter()
         docs = list(documents)
         chunks = make_chunks(docs, chunk_size, overlap)
+        sources = {doc.source for doc in docs}
         with self._write_lock:  # serialise writers; readers see the index swap atomically
-            if chunks:
-                vectors = self._embedder.embed_documents([c.text for c in chunks])
-                self._store.upsert(chunks, vectors)
+            # Re-ingesting a source replaces its previous content, so retired chunks disappear.
+            vectors = self._embedder.embed_documents([c.text for c in chunks])
+            self._store.replace_documents(sources, chunks, vectors)
             self._bm25 = BM25Index(self._store.all_chunks())
         return IngestReport(len(docs), len(chunks), perf_counter() - started)
 

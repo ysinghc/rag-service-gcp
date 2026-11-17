@@ -38,7 +38,15 @@ def main(argv: list[str] | None = None) -> int:
     settings = Settings.from_env()
     if args.store:
         settings = dataclasses.replace(settings, store_path=args.store)
-    pipeline = build_pipeline(settings)
+    try:
+        pipeline = build_pipeline(settings)
+    except Exception as exc:  # e.g. missing Google credentials for the Vertex backends
+        raise SystemExit(
+            f"Could not start the {settings.llm_backend}/{settings.embedder} backends: {exc}\n"
+            "Vertex AI needs the optional extra: pip install 'rag-service-gcp[gcp]'\n"
+            "and credentials: set GCP_PROJECT and run gcloud auth application-default login.\n"
+            "For an offline run, unset LLM_BACKEND and EMBEDDER."
+        ) from exc
 
     if args.command == "ingest":
         total_docs = total_chunks = 0
