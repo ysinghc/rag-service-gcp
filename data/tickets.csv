@@ -1,0 +1,6 @@
+ticket_id,product,priority,subject,resolution
+NA-1001,Pro,high,CSV export fails for reports over one million rows,Raised the export row limit to five million for Pro plans and added chunked export.
+NA-1002,Standard,low,Dark mode chart colours are hard to read,Chart palette updated in release 4.2. Users can override series colours in Settings.
+NA-1003,Enterprise,urgent,SAML login loops back to the sign-in page,Identity provider clock skew caused assertion rejection. The customer synchronised NTP and login recovered.
+NA-1004,Pro,medium,Scheduled report arrives at the wrong hour,Schedules were using UTC instead of the workspace time zone. Fixed by respecting the workspace setting.
+NA-1005,Standard,high,Refund requested after 45 days,Outside the 30-day window. Offered a plan downgrade credit instead.

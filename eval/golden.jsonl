@@ -1,0 +1,14 @@
+{"question": "How long is the refund window for annual subscriptions?", "expected_source": "data/docs/refund_policy.md"}
+{"question": "How are chargebacks handled?", "expected_source": "data/docs/refund_policy.md"}
+{"question": "How long do approved refunds take to appear on the payment method?", "expected_source": "data/docs/refund_policy.md"}
+{"question": "How long are audit logs retained?", "expected_source": "data/docs/security_overview.md"}
+{"question": "Which region can EU Enterprise customers keep their data in?", "expected_source": "data/docs/security_overview.md"}
+{"question": "Which data warehouses does Northwind support for connections?", "expected_source": "data/docs/onboarding_guide.md"}
+{"question": "What is the default time zone for scheduled reports?", "expected_source": "data/docs/onboarding_guide.md"}
+{"question": "How much does Northwind Pro cost per seat per month?", "expected_source": "data/products.jsonl"}
+{"question": "Which plan includes SAML SSO?", "expected_source": "data/products.jsonl"}
+{"question": "What was the fix for the CSV export failure with over one million rows?", "expected_source": "data/tickets.csv"}
+{"question": "Why did SAML login loop back to the sign-in page?", "expected_source": "data/tickets.csv"}
+{"question": "What is the capital of France?", "expected_source": null}
+{"question": "Who won the 2018 football world cup?", "expected_source": null}
+{"question": "What is the recipe for chocolate cake?", "expected_source": null}

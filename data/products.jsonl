@@ -1,0 +1,4 @@
+{"sku": "NA-STD", "name": "Northwind Standard", "price_usd_per_seat_month": 29, "seats_min": 1, "seats_max": 10, "features": "dashboards, scheduled reports, five data connections"}
+{"sku": "NA-PRO", "name": "Northwind Pro", "price_usd_per_seat_month": 59, "seats_min": 1, "seats_max": 100, "features": "unlimited dashboards, SAML SSO, 25 data connections, audit logs"}
+{"sku": "NA-ENT", "name": "Northwind Enterprise", "price_usd_per_seat_month": null, "seats_min": 100, "seats_max": null, "features": "EU data residency, custom retention, dedicated success manager, SCIM provisioning"}
+{"sku": "NA-AI", "name": "Natural Language Query add-on", "price_usd_per_seat_month": 15, "seats_min": 1, "seats_max": null, "features": "ask questions in plain English, query suggestions, assistant usage analytics"}
