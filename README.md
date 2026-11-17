@@ -71,6 +71,25 @@ curl -s localhost:8000/query -H 'content-type: application/json' \
 curl -s localhost:8000/metrics
 ```
 
+## Development workflow
+
+```bash
+make install   # create .venv and install the dev dependencies
+make check     # lint and tests
+make eval      # golden-set evaluation
+make demo      # ingest the sample corpus and ask one question
+```
+
+Agent instructions are versioned with the code. [`AGENTS.md`](AGENTS.md) is the shared guide for coding agents and human contributors. [`CLAUDE.md`](CLAUDE.md) imports it and adds workflow rules for the agent in this repository. `src/ragservice/CLAUDE.md` holds rules for the core package. The `.claude/` directory contains:
+
+- `settings.json`: pre-approved commands, commands that need confirmation, and denied file reads
+- `hooks/post_edit.py`: formats and lint-fixes each edited Python file, and reports lint errors that remain
+- `commands/`: the `/check`, `/eval` and `/ask` slash commands
+- `agents/`: a read-only `rag-reviewer` and an `eval-analyst` subagent
+- `skills/add-document-format/`: the steps for adding a new source format
+
+Pull requests use `.github/pull_request_template.md`.
+
 ## Using Gemini on Vertex AI
 
 ```bash

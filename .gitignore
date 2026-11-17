@@ -9,3 +9,5 @@ dist/
 *.sqlite
 *.sqlite3
 .env
+.claude/settings.local.json
+.demo/
